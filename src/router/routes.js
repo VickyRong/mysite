@@ -1,8 +1,10 @@
-import Home from "../pages/Home/Home";
-import Blog from "../pages/Blog/Blog";
-import About from "../pages/About/About";
+import Home from "../pages/home/Home";
+import Blog from "../pages/blog/Blog";
+import About from "../pages/about/About";
+import Wechat from "../pages/system/wechat/Wechat";
+import Browser from "../pages/system/browser/Browser";
 
-const routes = [
+const routerConfig = [
   {
     path: "/home",
     component: Home
@@ -14,6 +16,21 @@ const routes = [
   {
     path: "/about",
     component: About
+  },
+  {
+    path:"/system",
+    component:Wechat,
+    routes:[
+      {
+        path:"/wechat",
+        component:Wechat,
+      },
+      {
+        path:"/browser",
+        component:Browser,
+      }
+    ],
+    
   }
 ];
-export default routes;
+export default routerConfig;

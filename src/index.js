@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from './pages/Home/Home'
+import Home from './pages/home/Home'
 import * as serviceWorker from './serviceWorker';
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
