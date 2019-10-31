@@ -53,7 +53,7 @@ class Home extends Component {
                 }
               >
                 <Menu.Item key="1-1">
-                  <Link to="">好文</Link>
+                  <Link to="/article/daily">好文</Link>
                 </Menu.Item>
               </SubMenu>
               <SubMenu

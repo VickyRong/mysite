@@ -3,6 +3,7 @@ import Blog from "../pages/blog/Blog";
 import About from "../pages/about/About";
 import Wechat from "../pages/system/wechat/Wechat";
 import Browser from "../pages/system/browser/Browser";
+import Daily from "../pages/article/daily/Daily"
 
 const routerConfig = [
   {
@@ -18,6 +19,10 @@ const routerConfig = [
     component: About
   },
   {
+    path: "/article/daily",
+    component: Daily
+  },
+  {
     path:"/system",
     component:Wechat,
     routes:[
@@ -30,7 +35,7 @@ const routerConfig = [
         component:Browser,
       }
     ],
-    
   }
 ];
+
 export default routerConfig;
