@@ -1,34 +1,19 @@
 import React, { Component } from 'react';
-import {  BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import routes from './router/routes'  
-import NavBar from './components/NavBar/NavBar'
-import './App.css';
-
-
-function RouteWithSubRoutes(route) {
-  return (
-    <Route
-      path={route.path}
-      render={props => (
-        <route.component {...props} routes={route.routes} />
-      )}
-    />
-  );
-}
+import { Router } from "react-router-dom";
+import RouterMap from '../src/router/routerMap'
+import BaseLayout from './layout/BaseLayout'
+import { createBrowserHistory } from "history";
+const history = createBrowserHistory();
 
 class App extends Component {
   render() {
     return (
-      <Router>
-        <NavBar/>
-        <Switch>
-          {routes.map((route, i) => (
-            <RouteWithSubRoutes key={i} {...route} />
-          ))}
-        </Switch>
-    </Router>
+      <Router history={history}>
+        <BaseLayout>
+            <RouterMap></RouterMap>
+        </BaseLayout>
+      </Router>
     );
   }
 }
-
 export default App;

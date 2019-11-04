@@ -1,21 +1,22 @@
 import React , { Component } from 'react';
 import { Route,Switch } from 'react-router-dom';
-import routes from './routes.js'
-class routerMap extends Component {
+
+class SystemIndex extends Component {
     render(){
+      let { routes } = this.props;
       return (
-        <Switch>
-          { routes.map((route,i) => 
-              <Route key={i}
+          <Switch>
+            {routes.map((route, i) => (
+              <Route key={i} 
                 path={route.path}
                 render={props => (
                   <route.component {...props} routes={route.routes} />
                 )}
-              />
-          ) }
-        </Switch>
-      )
+               />
+            ))}
+          </Switch>
+      );
     }
 }
 
-export default routerMap;
+export default SystemIndex

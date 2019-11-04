@@ -1,8 +1,8 @@
 import React , { Component } from 'react';
-class Browser extends Component {
+class Frame extends Component {
     render(){
-        return <h2>浏览器相关页</h2>;
+        return <h2>框架学习页</h2>;
     }
 }
 
-export default Browser
+export default Frame

@@ -1,13 +1,20 @@
 import React, { Component } from "react";
-import './Home.css'
+import './BaseLayout.css'
 import { Layout, Menu, Breadcrumb, Icon } from "antd";
 import { Link } from "react-router-dom";
-import RouterMap from "../../router/routerMap"
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-class Home extends Component {
+class BaseLayout extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      collapsed: false,
+    };
+  }
+
   render() {
+    const { children } = this.props;
     return (
       <Layout>
         {/** 顶部 */}
@@ -26,7 +33,7 @@ class Home extends Component {
               <Link to="/blog">文章</Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to="/about">知识体系</Link>
+              <Link to="/system">知识体系</Link>
             </Menu.Item>
             <Menu.Item key="4">
               <Link to="/about">解决方案</Link>
@@ -69,7 +76,7 @@ class Home extends Component {
                   <Link to="/">核心语言</Link>
                 </Menu.Item>
                 <Menu.Item key="2-2">
-                  <Link to="/">框架学习</Link>
+                  <Link to="/system/frame">框架学习</Link>
                 </Menu.Item>
                 <Menu.Item key="2-3">
                   <Link to="/system/wechat">微信开发</Link>
@@ -124,7 +131,7 @@ class Home extends Component {
               }}
             >
               {/** 核心路由页面 */}
-                <RouterMap/>
+                { children }
             </Content>
           </Layout>
         </Layout>
@@ -133,4 +140,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default BaseLayout;
