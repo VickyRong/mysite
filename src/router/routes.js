@@ -1,20 +1,11 @@
-import Blog from "../pages/blog/Blog";
-import About from "../pages/about/About";
 import Wechat from "../pages/system/wechat/Wechat";
 import Browser from "../pages/system/browser/Browser";
-import Daily from "../pages/article/daily/Daily";
 import System from "../pages/system/index/SystemIndex";
 import Frame from "../pages/system/frame/Frame"
+import Article from "../pages/article/index/ArticleIndex"
+import Daily from "../pages/article/daily/Daily";
 
 const routerConfig = [
-    { 
-      path: '/blog',
-      component: Blog,
-    },
-    { 
-      path: '/about',
-      component: About
-    },
     {
       path: '/system', 
       component: System,
@@ -24,7 +15,13 @@ const routerConfig = [
         { path: '/system/frame', component: Frame },
       ]
     },
-    { path: '/article/daily', component: Daily },
+    {
+      path: '/article', 
+      component: Article,
+      routes:[
+        { path: '/article/daily', component: Daily },
+      ]
+    },
 ];
 
 export default routerConfig;
