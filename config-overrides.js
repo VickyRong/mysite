@@ -1,5 +1,6 @@
-const { override, fixBabelImports, addWebpackModuleRule } = require('customize-cra');
+const { override, fixBabelImports, addWebpackModuleRule,addDecoratorsLegacy } = require('customize-cra');
 module.exports = override(
+     addDecoratorsLegacy(),
      fixBabelImports('import', {
        libraryName: 'antd',
        libraryDirectory: 'es',
@@ -9,18 +10,6 @@ module.exports = override(
       {
         test: /\.md$/,
         use: "raw-loader"
-        // use: [
-        //   {
-        //     loader: 'html-loader',
-        //   },
-        //   {
-        //     loader: 'markdown-loader',
-        //     options: {
-        //       pedantic: true,
-        //       renderer
-        //     },
-        //   },
-        // ],
       }
      )
    );

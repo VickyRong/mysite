@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../src/assets/css/common.css'
 import { Router } from "react-router-dom";
 import RouterMap from '../src/router/routerMap'
 import BaseLayout from './layout/BaseLayout'
