@@ -1,18 +1,21 @@
-import Wechat from "../pages/system/wechat/Wechat";
-import Browser from "../pages/system/browser/Browser";
 import System from "../pages/system/index/SystemIndex";
-import Frame from "../pages/system/frame/Frame"
+import JS from "../pages/system/js/JS";
 import Article from "../pages/article/index/ArticleIndex"
 import Daily from "../pages/article/daily/Daily";
+import Wechat from "../pages/system/wechat/Wechat";
+import Home from "../pages/home/Home";
+
 
 const routerConfig = [
+    {
+      path: '/home', 
+      component: Home,
+    },  
     {
       path: '/system', 
       component: System,
       routes:[
-        { path: '/system/wechat', component: Wechat },
-        { path: '/system/browser', component: Browser},
-        { path: '/system/frame', component: Frame },
+        { path: '/system/js', component: JS },
       ]
     },
     {
@@ -21,6 +24,10 @@ const routerConfig = [
       routes:[
         { path: '/article/daily', component: Daily },
       ]
+    },
+    {
+      path: '/solution', 
+      component: Wechat,
     },
 ];
 

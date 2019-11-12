@@ -1,14 +1,10 @@
 
 @import '~antd/dist/antd.css';
-#root,.ant-layout{
-  height: 100%;
-}
 
-#root {
-  height: 100%;
-  overflow: auto;
-  /* ------弹性布局start------*/
-  /* ------弹性布局end------*/
+.logo {
+  height: 32px;
+  margin: 16px;
+  text-align: center;
 }
 #root .g-flex {
   display: flex;

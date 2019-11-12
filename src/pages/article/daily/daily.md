@@ -1,9 +1,4 @@
 ## CSS
-header 1 | header 2
----|---
-row 1 col 1 | row 1 col 2
-row 2 col 1 | row 2 col 2
-
 - [ ] [css加载会造成阻塞吗](https://link.juejin.im/?target=https%3A%2F%2Fsegmentfault.com%2Fa%2F1190000018130499)
 - [ ] [不可思议的纯 CSS 滚动进度条效果](https://juejin.im/post/5c35953ce51d45523f04b6d2)
 - [ ] [CSS实现水平垂直居中的1010种方式（史上最全）](https://juejin.im/post/5b9a4477f265da0ad82bf921)

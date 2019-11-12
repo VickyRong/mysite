@@ -1,5 +1,10 @@
 
 const navConfig = [
+    {
+      path:'/home',
+      title:'首页',
+      iconName:'home'
+    },
     { 
       path: '/blog',
       title: '文章',
@@ -9,6 +14,10 @@ const navConfig = [
           path:'/article/daily',
           title:'好文日日读'
         },
+        {
+          path:'/article/translate',
+          title:'翻译专栏'
+        },
       ]
     },
     { 
@@ -16,6 +25,10 @@ const navConfig = [
       title: '知识体系',
       iconName:'cluster',
       children:[
+          {
+            path:'/system/js',
+            title:'Js基础'
+          },
         {
           path:'/system/frame',
           title:'框架学习'
@@ -31,24 +44,10 @@ const navConfig = [
       ]
     },
     { 
-      path: '/',
+      path: '/solution',
       title: '解决方案',
       iconName:'code',
-      children:[
-        {
-          path:'/',
-          title:'Css相关'
-        },
-        {
-          path:'/',
-          title:'Js相关'
-        },
-        {
-          path:'/',
-          title:'兼容性相关'
-        },
-      ]
-    },
+    }
 ];
 
 export default navConfig;
