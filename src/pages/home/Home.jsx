@@ -1,45 +1,31 @@
 import React, { Component } from "react";
 import { Button } from 'antd';
 import axios from 'axios';
+import { queryRecord } from '../../service/api'
 
 class Daily extends Component {
-  handleSave = async() =>{
-    //利用xhr发请求
-    // var xhr  = new XMLHttpRequest();
-    // xhr.open('POST','http://127.0.0.1:8082/saveMdFile');
-    // xhr.send(JSON.stringify({ example:'data' }));
-    // console.log("xhr:",xhr)
-
-    //利用axios发请求
-    //get方式
-    // const response = await axios.get('http://127.0.0.1:8082/saveMdFile',
-    //   {
-    //    headers: {'Content-Type': 'application/json'},
-    //    params: { example:'vicky rong111111' },
-    // })
-    //   
-    // );
-    // console.log("response:",response.data)
-    //post方式
-    // const response = await axios.post(
-    //   'http://127.0.0.1:8082/saveMdFile',
-    //     { 
-    //       headers:{ 'Content-Type':'application/json' },
-    //       params: { example:'vicky rong' },
-    //     },
-        
-    //   )
-    // console.log(response.data)
-
-    //利用fetch()发起请求
-    const response = await fetch('http://127.0.0.1:8082/saveMdFile',{
-      method:'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:JSON.stringify({ example:'vicky00000' })
+  handleSave = () => {
+    var params = {};
+    this.simpleRequest(queryRecord.url,params)
+      .then(res=>{
+        console.log('返回值：',res)
     })
-    console.log(await response.json())
+  }
 
-
+  simpleRequest = (url,params) => {
+    return new Promise((resolve,reject)=>{
+      axios(url,{
+        method:'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:JSON.stringify(params)
+      }).then(res => {
+        if(res && res.data){
+          resolve(res.data)
+        }
+      }).catch(err => {
+          reject(err)
+      })
+    })
   }
 
 
