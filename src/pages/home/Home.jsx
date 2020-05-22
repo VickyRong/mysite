@@ -1,232 +1,151 @@
 import React, { Component } from "react";
-import { Button } from 'antd';
-import axios from 'axios';
-import { queryRecord } from '../../service/api'
+import { Button, Table, Tag , Popconfirm,message } from 'antd';
+import { queryUser,addUser,deleteUser,queryBlog,deleteBlog } from '../../service/api'
+import simpleRequest  from '../../utils/request'
 
-class Daily extends Component {
-  handleSave = () => {
-    var params = {};
-    this.simpleRequest(queryRecord.url,params)
+class Home extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+        userList : [], //用户信息
+        blogList : [], //文章信息
+    }
+  }
+
+  componentDidMount() {
+      this.queryUser();
+      this.queryBlog();
+  }
+
+  //新增用户
+  addUser = () => {
+      var params = {
+        name:'vicky',
+        sex:'女'
+      };
+      simpleRequest(addUser,params)
       .then(res=>{
-        console.log('返回值：',res)
-    })
-  }
-
-  simpleRequest = (url,params) => {
-    return new Promise((resolve,reject)=>{
-      axios(url,{
-        method:'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:JSON.stringify(params)
-      }).then(res => {
-        if(res && res.data){
-          resolve(res.data)
+        if(res){
+          message.success('新增成功！');
+          this.queryUser();
         }
-      }).catch(err => {
-          reject(err)
-      })
     })
   }
 
+  //查询用户
+  queryUser = () =>{
+    var params = {};
+    simpleRequest(queryUser,params)
+    .then(res=>{
+      if(res){
+        this.setState({ userList:res.res })
+      }
+    })
+  }
+
+  //删除用户
+  deleteUser = (id) =>{
+    var params = {
+      id:id
+    };
+    simpleRequest(deleteUser,params)
+    .then(res=>{
+      if(res){
+        message.success('删除成功！');
+        this.queryUser();
+      }
+    })
+  }
+
+  //查询文章
+  queryBlog = () =>{
+    var params = {};
+    simpleRequest(queryBlog,params)
+    .then(res=>{
+      if(res){
+        this.setState({ blogList:res.res })
+      }
+    })
+  }
+  //删除文章
+  deleteBlog = (id) =>{
+    var params = {
+      id:id
+    };
+    simpleRequest(deleteBlog,params)
+    .then(res=>{
+      if(res){
+        message.success('删除成功！');
+        this.queryBlog();
+      }
+    })
+  }
+  
 
   render() {
+    let { userList,blogList } = this.state;
+    //表头信息
+    const userColumns = [
+      {
+        title: '姓名',
+        dataIndex: 'name',
+        key: 'name',
+        render: text => <span>{text}</span>,
+      },
+      {
+        title: '操作',
+        key: 'action',
+        render: (text, record) => (
+          <>
+            <Popconfirm title="确定删除?" onConfirm={() => this.deleteUser(record._id)}>
+              <a> 删除 </a>
+            </Popconfirm>
+          </>
+        ),
+      },
+    ];
+    const blogColumns = [
+      {
+        title: '文章名',
+        dataIndex: 'name',
+        key: 'name',
+        render: text => <span>{text}</span>,
+      },
+      {
+        title: '星期',
+        dataIndex: 'weeks',
+        key: 'weeks',
+        render: text => <span>{text}</span>,
+      },
+      {
+        title: '操作',
+        key: 'action',
+        render: (text, record) => (
+          <Popconfirm title="确定删除?" onConfirm={() => this.deleteBlog(record._id)}>
+            <a> 删除 </a>
+          </Popconfirm>
+        ),
+      },
+    ];
+
     return (
-      <div>
-        <Button type="primary" onClick={this.handleSave}>保 存</Button>
-        <h3>首页</h3>
-        <p>
-          不可思议的纯 CSS 滚动进度条效果
-          CSS实现水平垂直居中的1010种方式（史上最全） rem布局解析
-          布局的下一次革新 彻底搞懂word-break、word-wrap、white-space
-          彻底搞懂CSS层叠上下文、层叠等级、层叠顺序、z-index
-          css加载会造成阻塞吗？ 从青铜到王者10个css3伪类使用技巧和运用，了解一哈
-          CSS性能优化的8个技巧 个人总结（css3新特性） CSS设置居中的方案总结-超全
-          Web开发者需要知道的CSS Tricks CSS 常用技巧
-          CSS世界中那些说起来很冷的知识 前端工程（架构、软实力）
-          前端缓存最佳实践 写给前端看的架构文章(1)：MVC VS Flux
-          前端数据校验从建模开始 前端也需要了解的 JSONP 安全
-          网站性能优化实战——从12.67s到1.06s的故事 5 分钟撸一个前端性能监控工具
-          浏览器页面资源加载过程与优化 现代化懒加载的方式 用 preload
-          预加载页面资源 干货!各种常见布局实现+知名网站实例分析
-          前端数据结构与算法 前端工程师为什么要学习编译原理？ jsonp的原理与实现
-          懒加载和预加载 【2019.10.10】 实现图片懒加载 【2019.10.10】
-          50行代码的MVVM，感受闭包的艺术
-          不好意思！耽误你的十分钟，让MVVM原理还给你 2018 前端性能优化清单
-          网页图片加载优化方案 把前端监控做到极致 如何优雅处理前端异常
-          经典面试题：从 URL 输入到页面展现到底发生什么 前端同构渲染的思考与实践
-          前端构建秘籍 大型项目前端架构浅谈（8000字原创）
-          一名【合格】前端工程师的自检清单 【2019.09.26】道阻且长，行则将至
-          React 技术栈 React 源码解析 从零搭建React全家桶框架教程
-        </p>
-        <p>
-          不可思议的纯 CSS 滚动进度条效果
-          CSS实现水平垂直居中的1010种方式（史上最全） rem布局解析
-          布局的下一次革新 彻底搞懂word-break、word-wrap、white-space
-          彻底搞懂CSS层叠上下文、层叠等级、层叠顺序、z-index
-          css加载会造成阻塞吗？ 从青铜到王者10个css3伪类使用技巧和运用，了解一哈
-          CSS性能优化的8个技巧 个人总结（css3新特性） CSS设置居中的方案总结-超全
-          Web开发者需要知道的CSS Tricks CSS 常用技巧
-          CSS世界中那些说起来很冷的知识 前端工程（架构、软实力）
-          前端缓存最佳实践 写给前端看的架构文章(1)：MVC VS Flux
-          前端数据校验从建模开始 前端也需要了解的 JSONP 安全
-          网站性能优化实战——从12.67s到1.06s的故事 5 分钟撸一个前端性能监控工具
-          浏览器页面资源加载过程与优化 现代化懒加载的方式 用 preload
-          预加载页面资源 干货!各种常见布局实现+知名网站实例分析
-          前端数据结构与算法 前端工程师为什么要学习编译原理？ jsonp的原理与实现
-          懒加载和预加载 【2019.10.10】 实现图片懒加载 【2019.10.10】
-          50行代码的MVVM，感受闭包的艺术
-          不好意思！耽误你的十分钟，让MVVM原理还给你 2018 前端性能优化清单
-          网页图片加载优化方案 把前端监控做到极致 如何优雅处理前端异常
-          经典面试题：从 URL 输入到页面展现到底发生什么 前端同构渲染的思考与实践
-          前端构建秘籍 大型项目前端架构浅谈（8000字原创）
-          一名【合格】前端工程师的自检清单 【2019.09.26】道阻且长，行则将至
-          React 技术栈 React 源码解析 从零搭建React全家桶框架教程
-        </p>
-        <p>
-          不可思议的纯 CSS 滚动进度条效果
-          CSS实现水平垂直居中的1010种方式（史上最全） rem布局解析
-          布局的下一次革新 彻底搞懂word-break、word-wrap、white-space
-          彻底搞懂CSS层叠上下文、层叠等级、层叠顺序、z-index
-          css加载会造成阻塞吗？ 从青铜到王者10个css3伪类使用技巧和运用，了解一哈
-          CSS性能优化的8个技巧 个人总结（css3新特性） CSS设置居中的方案总结-超全
-          Web开发者需要知道的CSS Tricks CSS 常用技巧
-          CSS世界中那些说起来很冷的知识 前端工程（架构、软实力）
-          前端缓存最佳实践 写给前端看的架构文章(1)：MVC VS Flux
-          前端数据校验从建模开始 前端也需要了解的 JSONP 安全
-          网站性能优化实战——从12.67s到1.06s的故事 5 分钟撸一个前端性能监控工具
-          浏览器页面资源加载过程与优化 现代化懒加载的方式 用 preload
-          预加载页面资源 干货!各种常见布局实现+知名网站实例分析
-          前端数据结构与算法 前端工程师为什么要学习编译原理？ jsonp的原理与实现
-          懒加载和预加载 【2019.10.10】 实现图片懒加载 【2019.10.10】
-          50行代码的MVVM，感受闭包的艺术
-          不好意思！耽误你的十分钟，让MVVM原理还给你 2018 前端性能优化清单
-          网页图片加载优化方案 把前端监控做到极致 如何优雅处理前端异常
-          经典面试题：从 URL 输入到页面展现到底发生什么 前端同构渲染的思考与实践
-          前端构建秘籍 大型项目前端架构浅谈（8000字原创）
-          一名【合格】前端工程师的自检清单 【2019.09.26】道阻且长，行则将至
-          React 技术栈 React 源码解析 从零搭建React全家桶框架教程
-        </p>
-        <p>
-          不可思议的纯 CSS 滚动进度条效果
-          CSS实现水平垂直居中的1010种方式（史上最全） rem布局解析
-          布局的下一次革新 彻底搞懂word-break、word-wrap、white-space
-          彻底搞懂CSS层叠上下文、层叠等级、层叠顺序、z-index
-          css加载会造成阻塞吗？ 从青铜到王者10个css3伪类使用技巧和运用，了解一哈
-          CSS性能优化的8个技巧 个人总结（css3新特性） CSS设置居中的方案总结-超全
-          Web开发者需要知道的CSS Tricks CSS 常用技巧
-          CSS世界中那些说起来很冷的知识 前端工程（架构、软实力）
-          前端缓存最佳实践 写给前端看的架构文章(1)：MVC VS Flux
-          前端数据校验从建模开始 前端也需要了解的 JSONP 安全
-          网站性能优化实战——从12.67s到1.06s的故事 5 分钟撸一个前端性能监控工具
-          浏览器页面资源加载过程与优化 现代化懒加载的方式 用 preload
-          预加载页面资源 干货!各种常见布局实现+知名网站实例分析
-          前端数据结构与算法 前端工程师为什么要学习编译原理？ jsonp的原理与实现
-          懒加载和预加载 【2019.10.10】 实现图片懒加载 【2019.10.10】
-          50行代码的MVVM，感受闭包的艺术
-          不好意思！耽误你的十分钟，让MVVM原理还给你 2018 前端性能优化清单
-          网页图片加载优化方案 把前端监控做到极致 如何优雅处理前端异常
-          经典面试题：从 URL 输入到页面展现到底发生什么 前端同构渲染的思考与实践
-          前端构建秘籍 大型项目前端架构浅谈（8000字原创）
-          一名【合格】前端工程师的自检清单 【2019.09.26】道阻且长，行则将至
-          React 技术栈 React 源码解析 从零搭建React全家桶框架教程
-        </p>
-        <p>
-          不可思议的纯 CSS 滚动进度条效果
-          CSS实现水平垂直居中的1010种方式（史上最全） rem布局解析
-          布局的下一次革新 彻底搞懂word-break、word-wrap、white-space
-          彻底搞懂CSS层叠上下文、层叠等级、层叠顺序、z-index
-          css加载会造成阻塞吗？ 从青铜到王者10个css3伪类使用技巧和运用，了解一哈
-          CSS性能优化的8个技巧 个人总结（css3新特性） CSS设置居中的方案总结-超全
-          Web开发者需要知道的CSS Tricks CSS 常用技巧
-          CSS世界中那些说起来很冷的知识 前端工程（架构、软实力）
-          前端缓存最佳实践 写给前端看的架构文章(1)：MVC VS Flux
-          前端数据校验从建模开始 前端也需要了解的 JSONP 安全
-          网站性能优化实战——从12.67s到1.06s的故事 5 分钟撸一个前端性能监控工具
-          浏览器页面资源加载过程与优化 现代化懒加载的方式 用 preload
-          预加载页面资源 干货!各种常见布局实现+知名网站实例分析
-          前端数据结构与算法 前端工程师为什么要学习编译原理？ jsonp的原理与实现
-          懒加载和预加载 【2019.10.10】 实现图片懒加载 【2019.10.10】
-          50行代码的MVVM，感受闭包的艺术
-          不好意思！耽误你的十分钟，让MVVM原理还给你 2018 前端性能优化清单
-          网页图片加载优化方案 把前端监控做到极致 如何优雅处理前端异常
-          经典面试题：从 URL 输入到页面展现到底发生什么 前端同构渲染的思考与实践
-          前端构建秘籍 大型项目前端架构浅谈（8000字原创）
-          一名【合格】前端工程师的自检清单 【2019.09.26】道阻且长，行则将至
-          React 技术栈 React 源码解析 从零搭建React全家桶框架教程
-        </p>
-        <p>
-          不可思议的纯 CSS 滚动进度条效果
-          CSS实现水平垂直居中的1010种方式（史上最全） rem布局解析
-          布局的下一次革新 彻底搞懂word-break、word-wrap、white-space
-          彻底搞懂CSS层叠上下文、层叠等级、层叠顺序、z-index
-          css加载会造成阻塞吗？ 从青铜到王者10个css3伪类使用技巧和运用，了解一哈
-          CSS性能优化的8个技巧 个人总结（css3新特性） CSS设置居中的方案总结-超全
-          Web开发者需要知道的CSS Tricks CSS 常用技巧
-          CSS世界中那些说起来很冷的知识 前端工程（架构、软实力）
-          前端缓存最佳实践 写给前端看的架构文章(1)：MVC VS Flux
-          前端数据校验从建模开始 前端也需要了解的 JSONP 安全
-          网站性能优化实战——从12.67s到1.06s的故事 5 分钟撸一个前端性能监控工具
-          浏览器页面资源加载过程与优化 现代化懒加载的方式 用 preload
-          预加载页面资源 干货!各种常见布局实现+知名网站实例分析
-          前端数据结构与算法 前端工程师为什么要学习编译原理？ jsonp的原理与实现
-          懒加载和预加载 【2019.10.10】 实现图片懒加载 【2019.10.10】
-          50行代码的MVVM，感受闭包的艺术
-          不好意思！耽误你的十分钟，让MVVM原理还给你 2018 前端性能优化清单
-          网页图片加载优化方案 把前端监控做到极致 如何优雅处理前端异常
-          经典面试题：从 URL 输入到页面展现到底发生什么 前端同构渲染的思考与实践
-          前端构建秘籍 大型项目前端架构浅谈（8000字原创）
-          一名【合格】前端工程师的自检清单 【2019.09.26】道阻且长，行则将至
-          React 技术栈 React 源码解析 从零搭建React全家桶框架教程
-        </p><p>
-          不可思议的纯 CSS 滚动进度条效果
-          CSS实现水平垂直居中的1010种方式（史上最全） rem布局解析
-          布局的下一次革新 彻底搞懂word-break、word-wrap、white-space
-          彻底搞懂CSS层叠上下文、层叠等级、层叠顺序、z-index
-          css加载会造成阻塞吗？ 从青铜到王者10个css3伪类使用技巧和运用，了解一哈
-          CSS性能优化的8个技巧 个人总结（css3新特性） CSS设置居中的方案总结-超全
-          Web开发者需要知道的CSS Tricks CSS 常用技巧
-          CSS世界中那些说起来很冷的知识 前端工程（架构、软实力）
-          前端缓存最佳实践 写给前端看的架构文章(1)：MVC VS Flux
-          前端数据校验从建模开始 前端也需要了解的 JSONP 安全
-          网站性能优化实战——从12.67s到1.06s的故事 5 分钟撸一个前端性能监控工具
-          浏览器页面资源加载过程与优化 现代化懒加载的方式 用 preload
-          预加载页面资源 干货!各种常见布局实现+知名网站实例分析
-          前端数据结构与算法 前端工程师为什么要学习编译原理？ jsonp的原理与实现
-          懒加载和预加载 【2019.10.10】 实现图片懒加载 【2019.10.10】
-          50行代码的MVVM，感受闭包的艺术
-          不好意思！耽误你的十分钟，让MVVM原理还给你 2018 前端性能优化清单
-          网页图片加载优化方案 把前端监控做到极致 如何优雅处理前端异常
-          经典面试题：从 URL 输入到页面展现到底发生什么 前端同构渲染的思考与实践
-          前端构建秘籍 大型项目前端架构浅谈（8000字原创）
-          一名【合格】前端工程师的自检清单 【2019.09.26】道阻且长，行则将至
-          React 技术栈 React 源码解析 从零搭建React全家桶框架教程
-        </p><p>
-          不可思议的纯 CSS 滚动进度条效果
-          CSS实现水平垂直居中的1010种方式（史上最全） rem布局解析
-          布局的下一次革新 彻底搞懂word-break、word-wrap、white-space
-          彻底搞懂CSS层叠上下文、层叠等级、层叠顺序、z-index
-          css加载会造成阻塞吗？ 从青铜到王者10个css3伪类使用技巧和运用，了解一哈
-          CSS性能优化的8个技巧 个人总结（css3新特性） CSS设置居中的方案总结-超全
-          Web开发者需要知道的CSS Tricks CSS 常用技巧
-          CSS世界中那些说起来很冷的知识 前端工程（架构、软实力）
-          前端缓存最佳实践 写给前端看的架构文章(1)：MVC VS Flux
-          前端数据校验从建模开始 前端也需要了解的 JSONP 安全
-          网站性能优化实战——从12.67s到1.06s的故事 5 分钟撸一个前端性能监控工具
-          浏览器页面资源加载过程与优化 现代化懒加载的方式 用 preload
-          预加载页面资源 干货!各种常见布局实现+知名网站实例分析
-          前端数据结构与算法 前端工程师为什么要学习编译原理？ jsonp的原理与实现
-          懒加载和预加载 【2019.10.10】 实现图片懒加载 【2019.10.10】
-          50行代码的MVVM，感受闭包的艺术
-          不好意思！耽误你的十分钟，让MVVM原理还给你 2018 前端性能优化清单
-          网页图片加载优化方案 把前端监控做到极致 如何优雅处理前端异常
-          经典面试题：从 URL 输入到页面展现到底发生什么 前端同构渲染的思考与实践
-          前端构建秘籍 大型项目前端架构浅谈（8000字原创）
-          一名【合格】前端工程师的自检清单 【2019.09.26】道阻且长，行则将至
-          React 技术栈 React 源码解析 从零搭建React全家桶框架教程
-        </p>
-      </div>
+      <>
+        {/** 操作区域 */}
+        <div className="g-mb-20">
+          <Button className="g-mr-10" type="primary" onClick={this.addUser}>新增用户</Button>
+        </div>
+        {/** 显示区域 */}
+        <div className="g-mb-20">
+          <Tag color="#ff5722" className="g-mb-20">用户信息表</Tag>
+          <Table columns={userColumns} dataSource={userList} rowKey="_id" />
+        </div>
+        <div className="g-mb-20">
+          <Tag color="#ff5722" className="g-mb-20">文章列表</Tag>
+          <Table columns={blogColumns} dataSource={blogList} rowKey="_id" />
+        </div>
+      </>
     );
   }
 }
 
-export default Daily;
+export default Home;
