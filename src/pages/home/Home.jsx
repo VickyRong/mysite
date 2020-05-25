@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Button, Table, Tag , Popconfirm,message } from 'antd';
-import { queryUser,addUser,deleteUser,queryBlog,deleteBlog } from '../../service/api'
+import { Button, Table, Tag, Popconfirm,message,Modal,Input } from 'antd';
+import { queryUser,addUser,updateUser,deleteUser,queryBlog,deleteBlog } from '../../service/api'
 import simpleRequest  from '../../utils/request'
+import _ from 'lodash';
 
 class Home extends Component {
   constructor(props){
@@ -9,6 +10,8 @@ class Home extends Component {
     this.state = {
         userList : [], //用户信息
         blogList : [], //文章信息
+        visible:false, //弹窗显示 
+        updateUserInfo:{}
     }
   }
 
@@ -43,6 +46,41 @@ class Home extends Component {
     })
   }
 
+  //编辑用户
+  updateUser = (record) =>{
+    if(record){
+      this.showModal()
+      this.setState({
+        updateUserInfo:record,
+      })
+    }
+  }
+
+  //修改用户
+  toUpdateUser = () =>{
+    let { updateUserInfo } = this.state
+    var params = {
+      ...updateUserInfo
+    };
+    simpleRequest(updateUser,params)
+    .then(res=>{
+      if(res){
+        message.success('修改成功！');
+        this.queryUser();
+      }
+    })
+  }
+  
+  //修改输入框
+  onInputChange = (e) =>{
+    let { updateUserInfo } = this.state
+    let obj = _.cloneDeep(updateUserInfo);
+    let key = e.target.name;
+    let value = e.target.value;
+    obj[key] = value;
+    this.setState({ updateUserInfo:obj })
+  }
+
   //删除用户
   deleteUser = (id) =>{
     var params = {
@@ -67,6 +105,7 @@ class Home extends Component {
       }
     })
   }
+
   //删除文章
   deleteBlog = (id) =>{
     var params = {
@@ -80,16 +119,43 @@ class Home extends Component {
       }
     })
   }
+
+  //确认弹窗
+  handleOk = e =>{
+    this.toUpdateUser();
+    this.hideModal()
+  }
+
+  //取消弹窗 
+  handleCancel = e => {
+    this.hideModal()
+  };
+
+  //打开弹窗
+  showModal = () => {
+    this.setState({  visible: true });
+  };
+
+  //关闭弹窗
+  hideModal = () => {
+    this.setState({  visible: false });
+  };
   
 
   render() {
-    let { userList,blogList } = this.state;
+    let { userList,blogList,visible,updateUserInfo } = this.state;
     //表头信息
     const userColumns = [
       {
         title: '姓名',
         dataIndex: 'name',
         key: 'name',
+        render: text => <span>{text}</span>,
+      },
+      {
+        title: '性别',
+        dataIndex: 'sex',
+        key: 'sex',
         render: text => <span>{text}</span>,
       },
       {
@@ -100,6 +166,7 @@ class Home extends Component {
             <Popconfirm title="确定删除?" onConfirm={() => this.deleteUser(record._id)}>
               <a> 删除 </a>
             </Popconfirm>
+            <a onClick={() => this.updateUser(record)} > 编辑 </a>
           </>
         ),
       },
@@ -121,9 +188,12 @@ class Home extends Component {
         title: '操作',
         key: 'action',
         render: (text, record) => (
-          <Popconfirm title="确定删除?" onConfirm={() => this.deleteBlog(record._id)}>
-            <a> 删除 </a>
-          </Popconfirm>
+          <>
+            <Popconfirm title="确定删除?" onConfirm={() => this.deleteBlog(record._id)}>
+              <a> 删除 </a>
+            </Popconfirm>
+            <a onClick={() => this.updateUser(record)} > 编辑 </a>
+          </>
         ),
       },
     ];
@@ -139,10 +209,20 @@ class Home extends Component {
           <Tag color="#ff5722" className="g-mb-20">用户信息表</Tag>
           <Table columns={userColumns} dataSource={userList} rowKey="_id" />
         </div>
-        <div className="g-mb-20">
+        {/* <div className="g-mb-20">
           <Tag color="#ff5722" className="g-mb-20">文章列表</Tag>
           <Table columns={blogColumns} dataSource={blogList} rowKey="_id" />
-        </div>
+        </div> */}
+        {/** 弹窗内容 */}
+        <Modal
+          title="修改信息"
+          visible={visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+         姓名： <Input value={ updateUserInfo.name } name="name" onChange={ this.onInputChange } />
+         性别： <Input value={ updateUserInfo.sex } name="sex" onChange={ this.onInputChange } />
+        </Modal>
       </>
     );
   }
