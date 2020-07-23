@@ -4,6 +4,7 @@ import Article from "../pages/article/index/ArticleIndex"
 import Daily from "../pages/article/daily/Daily";
 import Wechat from "../pages/system/wechat/Wechat";
 import Home from "../pages/home/Home";
+import Solution from "../pages/solution/index/SolutionIndex";
 
 
 const routerConfig = [
@@ -27,7 +28,7 @@ const routerConfig = [
     },
     {
       path: '/solution', 
-      component: Wechat,
+      component: Solution,
     },
 ];
 

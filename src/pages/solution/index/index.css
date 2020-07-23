@@ -1,0 +1,13 @@
+.container {
+    list-style: none;
+}
+.container li{
+    height: 30px;
+    cursor: pointer;
+    /* background-color: aliceblue; */
+    margin-bottom: 4px;
+}
+.shadow-class{
+    background: #ffffff;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.21);
+}
